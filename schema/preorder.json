@@ -1,0 +1,7 @@
+{
+	"order_id": "UUID", 
+	"user_id": "Int",	
+	"order_placed_at": "Long",
+	"order_status": "Enum",
+	"order_json": "order-details"
+}

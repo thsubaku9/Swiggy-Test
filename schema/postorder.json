@@ -1,0 +1,6 @@
+{
+    "order_id": "UUID",
+    "de_id": "Int",
+    "de_assigned_at": "Long",
+    "order_delivered_at": "Long"
+}

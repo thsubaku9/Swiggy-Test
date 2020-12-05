@@ -1,0 +1,6 @@
+{
+    "name": "String", 
+    "isVeg": "boolean", 
+    "item_price": "double", 
+    "GST": "double"
+}

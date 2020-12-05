@@ -1,0 +1,6 @@
+{
+    "user_id":"Int",
+    "user_name":"String",
+    "user_address":"String",
+    "user_lat_lng":"String"
+}

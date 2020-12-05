@@ -1,0 +1,19 @@
+{
+    "UserLatLong": "String",
+    "User Address": "String",
+    "DeliveryCharge": "Double",
+    "GST": "Double",
+    "CouponCode": "String",
+    "ItemsList": "[Item]",
+    "RestaurantDetails": {
+        "Name": "String",
+        "Address": "String",
+        "LatLong": "String"
+    },
+    "PaymentDetails": {
+        "PaymentMethod": "String",
+        "PaymentTransactionStatus": "Enum",
+        "TransactionID": "UUID",
+        "PaymentAmount": "Double"
+    }
+}
