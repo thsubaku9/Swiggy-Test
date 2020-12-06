@@ -1,6 +1,5 @@
 import uuid
 import random
-import json
 
 DEGREE = 90
 
@@ -36,22 +35,13 @@ def create_user_table(lim,file_path = "./Names.csv"):
     names = load_names(file_path)
     res = []
     user_uuids = dict()
-    for i in range(0,lim):
-        a1 = []
+    for i in range(0,lim):        
         generated_uuid = gen_uuid()
         ll = gen_lat_long()
         name = gen_user_name(names)        
         addr = gen_addr()
         user_uuids[generated_uuid] = (ll,addr)
-        a1.append(generated_uuid)
-        a1.append(name)
-        a1.append(addr)
-        a1.append(ll)
-        res.append(a1)
+        user = {"user_id":generated_uuid, "user_name": name, "user_address": addr, "user_lat_lng": ll}
+        res.append(user)
         
     return res,user_uuids
-
-def save_user_table(user_data,filename = "user_table.json"):
-    data = json.JSONEncoder().encode(user_data)
-    with open(filename,"w+") as file:
-        file.write(data)

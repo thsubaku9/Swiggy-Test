@@ -6,7 +6,7 @@ import math
 DEGREE = 90
 order_stat = ["issued","delivering", "received"]
 enum_order_stat = list(enumerate(order_stat))
-paymentMethod = ["credit card", "debit card", "cash on delivery", "UPI", "gift coupon"]
+payment_type = ["credit card", "debit card", "cash on delivery", "UPI", "gift coupon"]
 payment_stat = ["failed","success"]
 enum_payment_stat = list(enumerate(payment_stat))
 coupons = ["Swiggy20","Swiggy40","FirstTime","Weekender","Birthday","Anniversary","First5"]
@@ -110,7 +110,7 @@ def gen_items():
         selectedItems.append(foodList[index])
     return selectedItems
 
-def create_order(userLatLong,userAddr,deliveryPricePerKm = 20):
+def create_order(userLatLong,userAddr,deliveryPricePerKm = 10):
     #userLatLong, userAddr, DeliveryCharge + Gst, couponCode, itemList, restaurantDetails, PaymentDetails
     _lat,_long = list(map(float,userLatLong.split(',')))
     orderMap = dict()
@@ -139,46 +139,42 @@ def create_order(userLatLong,userAddr,deliveryPricePerKm = 20):
 def gen_restaurantInfo():
     index = (int)(random.random() * len(restaurantList))
     return restaurantList[index]
+
+def transact_status():
+    if (random.random() <0.01):
+        return enum_payment_stat[0][0]
+    else:
+        return enum_payment_stat[1][0]
     
 def gen_payment(amount):
-    PaymentMethod = 
-    PaymentTransactionStatus = 
-    TransactionID = 
+    PaymentMethod = payment_type[int(random.random() * len(payment_type))]
+    PaymentTransactionStatus = transact_status()
+    TransactionID = gen_uuid()
     PaymentAmount = amount
-    return 0
+    return {"PaymentMethod" : PaymentMethod, "PaymentTransactionStatus" : PaymentTransactionStatus, "TransactionID": TransactionID, "PaymentAmount": PaymentAmount }
 
 def create_pre_post(user_uuids,orders = 10):
     pre = []
     post = []
     user_uuids_keys = list(user_uuids.keys())
     for i in range(0,orders):
-        pre_tab = []
-        post_tab = []
         #pre data
         #order_id, user_id,place_time,order_stat,order_json
         order_id = gen_uuid()
         user_id = get_user_id(user_uuids_keys)
         start_t,assigned_t,delivered_t = time_triplet()
-        order_status = get_order_status(start_t,assigned_t,delivered_t)
+        current_order_status = get_order_status(start_t,assigned_t,delivered_t)
         
         #order_json        
         order_json = create_order(user_uuids[user_id][0],user_uuids[user_id][1])
-        #create_order(userLatLong,userAddr,)
-        pre_tab.append(order_id)
-        pre_tab.append(user_id)
-        pre_tab.append(start_t)
-        pre_tab.append(order_stat)
-        pre_tab.append(order_json)
+        preValue = {"order_id": order_id, "user_id": user_id, "order_placed_at": start_t, "order_status": current_order_status,"order_json": order_json}
         
         #post data
         #order_id, del_id,assigned_time,delivered_time
-        del_id = gen_uuid()
-        post_tab.append(order_id)
-        post_tab.append(del_id)
-        post_tab.append(assigned_t)
-        post_tab.append(delivered_t)
+        de_id = gen_uuid()
+        postValue = {"order_id": order_id, "de_id": de_id, "de_assigned_at": assigned_t,"order_delivered_at": delivered_t}
 
-        pre.append(pre_tab)
-        post.append(post_tab)
+        pre.append(preValue)
+        post.append(postValue)
 
     return pre,post
