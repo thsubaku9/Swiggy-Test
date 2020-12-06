@@ -17,7 +17,7 @@ def load_food_list(fileLoc = "./food.txt"):
         isVeg = bool(int(isVeg))
         price = int(price)
         gst = gen_gst_rate(price)
-        item = [Name,isVeg,price,gst]
+        item = {"name":Name, "isVeg":isVeg, "price":price, "GST":gst}
         foodList.append(item)
     file.close()
 
@@ -86,18 +86,28 @@ def distance(startLat,startLong,endLat,endLong):
     return ( c*r)
 
 def gen_items():
-    return 0
+    selectedItems = []
+    total_items = int(random.random() * len(foodList)) + 1
+    for i in range(0,total_items):
+        index = int(random.random() * len(foodList))
+        selectedItems.append(foodList[index])
+    return selectedItems
 
-def create_order(userLatLong,userAddr,):    
+def create_order(userLatLong,userAddr,deliveryPricePerKm = 20):
     #userLatLong, userAddr, DeliveryCharge + Gst, couponCode, itemList, restaurantDetails, PaymentDetails
     _lat,_long = list(map(float,userLatLong.split(',')))
     orderMap = dict()
+    _itemlist = gen_items()
+    netGST = 0
+    for i in range(0,len(_itemlist)):
+        netGST += _itemlist[i]["GST"]
+        
     orderMap["UserLatLong"] = userLatLong
     orderMap["userAddr"] = userAddr
-    orderMap["DeliveryCharge"] = distance(''' Locations''') * 20
-    orderMap["GST"]
+    orderMap["DeliveryCharge"] = distance(''' Locations''') * deliveryPricePerKm
+    orderMap["GST"] = netGST
     orderMap["CouponCode"] = gen_coupon()
-    orderMap["ItemsList"],amt,gst = gen_items()
+    orderMap["ItemsList"] = gen_items()
     orderMap["RestaurantDetails"] = gen_restaurantInfo()
     #amt needs to be recalculated
     orderMap["PaymentDetails"] = gen_payment(amt)
