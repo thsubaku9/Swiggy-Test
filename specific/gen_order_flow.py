@@ -3,12 +3,15 @@ import random
 import time
 import math
 
+DEGREE = 90
 order_stat = ["issued","delivering", "received"]
 enum_order_stat = list(enumerate(order_stat))
+paymentMethod = ["credit card", "debit card", "cash on delivery", "UPI", "gift coupon"]
 payment_stat = ["failed","success"]
 enum_payment_stat = list(enumerate(payment_stat))
 coupons = ["Swiggy20","Swiggy40","FirstTime","Weekender","Birthday","Anniversary","First5"]
 foodList = []
+restaurantList = []
 
 def load_food_list(fileLoc = "./food.txt"):
     file = open(fileLoc,'r')
@@ -21,6 +24,20 @@ def load_food_list(fileLoc = "./food.txt"):
         foodList.append(item)
     file.close()
 
+def gen_lat_long():
+    lat = (random.random() * 2 * DEGREE) - DEGREE
+    long = (random.random() * 4 * DEGREE) - 2*DEGREE
+    return str.format("{},{}",lat,long)
+
+def create_restaurant_list(net):    
+    for i in range(0,net):        
+        num = int(random.random() * 10e5)
+        shop = int(random.random() * 10e3)
+        avenue = int(random.random() * 10e3)
+        ll = gen_lat_long()
+        res = {"name": str.format("restaurant #{}",num), "addr" : str.format("Shop {} - Avenue {}",shop,avenue), "LatLong": ll}
+        restaurantList.append(res)
+        
 def gen_uuid():
     return uuid.uuid4().int
 
@@ -99,27 +116,35 @@ def create_order(userLatLong,userAddr,deliveryPricePerKm = 20):
     orderMap = dict()
     _itemlist = gen_items()
     netGST = 0
+    netAmt = 0
     for i in range(0,len(_itemlist)):
         netGST += _itemlist[i]["GST"]
+        netAmt += _itemlist[i]["price"]
         
+    restaurant = gen_restaurantInfo()
+    _latres,_longres = list(map(float,restaurant["LatLong"].split(',')))
+    
     orderMap["UserLatLong"] = userLatLong
     orderMap["userAddr"] = userAddr
-    orderMap["DeliveryCharge"] = distance(''' Locations''') * deliveryPricePerKm
+    orderMap["DeliveryCharge"] = distance(_lat,_long,_latres,_longres) * deliveryPricePerKm
     orderMap["GST"] = netGST
     orderMap["CouponCode"] = gen_coupon()
     orderMap["ItemsList"] = gen_items()
-    orderMap["RestaurantDetails"] = gen_restaurantInfo()
+    orderMap["RestaurantDetails"] = restaurant
     #amt needs to be recalculated
-    orderMap["PaymentDetails"] = gen_payment(amt)
+    orderMap["PaymentDetails"] = gen_payment(netAmt)
 
     return orderMap
 
 def gen_restaurantInfo():
-    #map of resta info
-    return 0
+    index = (int)(random.random() * len(restaurantList))
+    return restaurantList[index]
     
 def gen_payment(amount):
-    #returns a map of data
+    PaymentMethod = 
+    PaymentTransactionStatus = 
+    TransactionID = 
+    PaymentAmount = amount
     return 0
 
 def create_pre_post(user_uuids,orders = 10):

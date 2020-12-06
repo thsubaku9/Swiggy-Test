@@ -28,7 +28,6 @@ def gen_user_name(user_list):
 
 #utilizing the DD format (range from (-90,90) for N and E)
 def gen_lat_long():
-    global DEGREE
     lat = (random.random() * 2 * DEGREE) - DEGREE
     long = (random.random() * 4 * DEGREE) - 2*DEGREE
     return str.format("{},{}",lat,long)
