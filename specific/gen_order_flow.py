@@ -7,9 +7,18 @@ order_stat = ["issued","delivering", "received"]
 enum_order_stat = list(enumerate(order_stat))
 payment_stat = ["failed","success"]
 enum_payment_stat = list(enumerate(payment_stat))
+coupons = ["Swiggy20","Swiggy40","FirstTime","Weekender","Birthday","Anniversary","First5"]
 
 def gen_uuid():
     return uuid.uuid4().int
+
+def gen_coupon():
+    isCoup = random.random()
+    if(isCoup >0.3):
+        loc = int(random.random() * len(coupons))
+        return coupons[loc]
+    else:
+        return ""
 
 def get_user_id(uid_list):
     index = (int)(random.random() * len(uid_list))
@@ -48,12 +57,12 @@ def order_status(start_t,assigned_t,delivered_t):
         return enum_order_stat[2][0]
     
 
-def gst_rate(order_price ,base = 0.05,cap = 0.20):
+def gen_gst_rate(order_price ,base = 0.05,cap = 0.20):
     gst_created = (random.random() * (cap - base)) + base
     return order_price * gst_created
 
 def distance(startLat,startLong,endLat,endLong):
-    #haversine formula
+    #haversine formula - distance in km
     lat1 = math.radians(startLat)
     lat2 = math.radians(endLat)
     lon1 = math.radians(startLong)
@@ -61,15 +70,28 @@ def distance(startLat,startLong,endLat,endLong):
 
     a = math.sin((lat2 - lat1)/2)**2 + math.cos(lat1)* math.cos(lat2) * math.sin((lon2 - lon1)/2)**2
     c = 2 * math.asin(math.sqrt(a))
+    r = 6371
     return ( c*r)
 
-def create_order(userLatLong,userAddr,):
+def create_order(userLatLong,userAddr,):    
     #userLatLong, userAddr, DeliveryCharge + Gst, couponCode, itemList, restaurantDetails, PaymentDetails
+    orderMap = dict()
+    orderMap["UserLatLong"] = userLatLong
+    orderMap["userAddr"] = userAddr
+    orderMap["DeliveryCharge"] = distance(''' Locations''') * 20
+    orderMap["GST"] = gen_gst_rate('''order pricing''')
+    orderMap["CouponCode"] = gen_coupon()
+    orderMap["ItemsList"],amt = gen_items(restaurant_name)
+    orderMap["RestaurantDetails"] = gen_restaurantInfo()
+    #amt needs to be recalculated
+    orderMap["PaymentDetails"] = gen_payment(amt)
 
 def gen_restaurantInfo():
+    return 0
     
 def gen_payment(amount):
     #returns a map of data
+    return 0
 
 def create_pre_post(user_uuids,orders = 10):
     pre = []
@@ -101,6 +123,9 @@ def create_pre_post(user_uuids,orders = 10):
         post_tab.append(del_id)
         post_tab.append(assigned_t)
         post_tab.append(delivered_t)
+
+        pre.append(pre_tab)
+        post.append(post_tab)
 
 
 ##Data generator needs to be completed by 4 MAX !

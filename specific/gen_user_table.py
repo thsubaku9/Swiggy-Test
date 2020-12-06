@@ -36,7 +36,7 @@ def gen_lat_long():
 def create_user_table(lim,file_path = "F:/Swiggy Test/specific/Names.csv"):
     names = load_names(file_path)
     res = []
-    user_uuids = map()
+    user_uuids = dict()
     for i in range(0,lim):
         a1 = []
         generated_uuid = gen_uuid()
