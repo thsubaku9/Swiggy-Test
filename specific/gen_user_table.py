@@ -8,7 +8,7 @@ DEGREE = 90
 
 def load_names(file_path):
     names = []
-    with open(file_path) as file:
+    with open(file_path,'r') as file:
         for line in file:
             names.append(line.split("\n")[0])
     return names
@@ -33,7 +33,7 @@ def gen_lat_long():
     long = (random.random() * 4 * DEGREE) - 2*DEGREE
     return str.format("{},{}",lat,long)
 
-def create_user_table(lim,file_path = "F:/Swiggy Test/specific/Names.csv"):
+def create_user_table(lim,file_path = "./Names.csv"):
     names = load_names(file_path)
     res = []
     user_uuids = dict()

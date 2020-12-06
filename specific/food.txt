@@ -1,0 +1,30 @@
+Cheese Pizza,1,300
+Pepperoni Pizza,0,500
+Lambfest Pizza,0,370
+Paneer Pizza,1,390
+Mexican Pizza Veg,1,200
+Mexican Pizza Nonveg,0,300
+Hawaii Pizza,0,350
+Corn Pizza,1,150
+Macaroni Salad,1,450
+Chicken Salad,0,450
+Caeser Salad,1,450
+Salmon Salad,0,450
+Peanut Salad,1,450
+Tossed Salad,1,450
+Honey Chicken Salad,0,450
+Brownie,1,200
+Hashbrown,1,50
+Vanilla Ice Cream,1,180
+Chocolate Ice Cream,1,120
+Mint Ice Cream,1,280
+Butterscotch Ice Cream,1,80
+Honey Nut Crunch Ice Cream,1,190
+Cookies and Cream Ice Cream,1,90
+Pecan Ice Cream,1,110
+Fried Prawn and Chips,0,220
+Fried Fish and Chips,0,200
+Fried Chicken,0,350
+Veg Sandwich,1,80
+Nonveg Sandwich,0,100
+Pav Bhaji,1,100

@@ -8,6 +8,18 @@ enum_order_stat = list(enumerate(order_stat))
 payment_stat = ["failed","success"]
 enum_payment_stat = list(enumerate(payment_stat))
 coupons = ["Swiggy20","Swiggy40","FirstTime","Weekender","Birthday","Anniversary","First5"]
+foodList = []
+
+def load_food_list(fileLoc = "./food.txt"):
+    file = open(fileLoc,'r')
+    for line in file:
+        Name,isVeg,price = line.split(",")
+        isVeg = bool(int(isVeg))
+        price = int(price)
+        gst = gen_gst_rate(price)
+        item = [Name,isVeg,price,gst]
+        foodList.append(item)
+    file.close()
 
 def gen_uuid():
     return uuid.uuid4().int
@@ -24,7 +36,7 @@ def get_user_id(uid_list):
     index = (int)(random.random() * len(uid_list))
     return uid_list[index]
 
-def time_triplet(offset):
+def time_triplet():
     start_t = 0
     assigned_t = 0
     delivered_t = 0
@@ -48,7 +60,7 @@ def time_triplet(offset):
 
     return start_t,assigned_t,delivered_t
             
-def order_status(start_t,assigned_t,delivered_t):
+def get_order_status(start_t,assigned_t,delivered_t):
     if (assigned_t == 0):
         return enum_order_stat[0][0]
     elif (delivered_t == 0):
@@ -73,20 +85,27 @@ def distance(startLat,startLong,endLat,endLong):
     r = 6371
     return ( c*r)
 
+def gen_items():
+    return 0
+
 def create_order(userLatLong,userAddr,):    
     #userLatLong, userAddr, DeliveryCharge + Gst, couponCode, itemList, restaurantDetails, PaymentDetails
+    _lat,_long = list(map(float,userLatLong.split(',')))
     orderMap = dict()
     orderMap["UserLatLong"] = userLatLong
     orderMap["userAddr"] = userAddr
     orderMap["DeliveryCharge"] = distance(''' Locations''') * 20
-    orderMap["GST"] = gen_gst_rate('''order pricing''')
+    orderMap["GST"]
     orderMap["CouponCode"] = gen_coupon()
-    orderMap["ItemsList"],amt = gen_items(restaurant_name)
+    orderMap["ItemsList"],amt,gst = gen_items()
     orderMap["RestaurantDetails"] = gen_restaurantInfo()
     #amt needs to be recalculated
     orderMap["PaymentDetails"] = gen_payment(amt)
 
+    return orderMap
+
 def gen_restaurantInfo():
+    #map of resta info
     return 0
     
 def gen_payment(amount):
@@ -96,20 +115,20 @@ def gen_payment(amount):
 def create_pre_post(user_uuids,orders = 10):
     pre = []
     post = []
-
+    user_uuids_keys = list(user_uuids.keys())
     for i in range(0,orders):
         pre_tab = []
         post_tab = []
         #pre data
         #order_id, user_id,place_time,order_stat,order_json
         order_id = gen_uuid()
-        user_id = get_user_id(user_uuids)
-        start_t,assigned_t,delivered_t = time_triplet('''offset''')
-        order_status = order_stat(start_t,assigned_t,delivered_t)
+        user_id = get_user_id(user_uuids_keys)
+        start_t,assigned_t,delivered_t = time_triplet()
+        order_status = get_order_status(start_t,assigned_t,delivered_t)
         
         #order_json        
-        order_json = create_order()
-
+        order_json = create_order(user_uuids[user_id][0],user_uuids[user_id][1])
+        #create_order(userLatLong,userAddr,)
         pre_tab.append(order_id)
         pre_tab.append(user_id)
         pre_tab.append(start_t)
@@ -127,5 +146,4 @@ def create_pre_post(user_uuids,orders = 10):
         pre.append(pre_tab)
         post.append(post_tab)
 
-
-##Data generator needs to be completed by 4 MAX !
+    return pre,post
